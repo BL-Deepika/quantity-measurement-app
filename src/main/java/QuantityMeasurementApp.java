@@ -1,22 +1,48 @@
 public class QuantityMeasurementApp {
 
-    // Inner class representing Feet measurement
-    public static class Feet {
 
-        // Immutable value field
+    // Enum for supported units
+    public enum LengthUnit {
+
+        FEET(1.0),
+        INCHES(1.0 / 12.0),
+        YARDS(3.0),
+        CENTIMETERS(0.0328084);
+
+        private final double conversionFactor;
+
+        LengthUnit(double conversionFactor) {
+            this.conversionFactor = conversionFactor;
+        }
+
+        public double getConversionFactor() {
+            return conversionFactor;
+        }
+    }
+
+    // Generic Quantity Length Class
+    public static class QuantityLength {
+
         private final double value;
+        private final LengthUnit unit;
 
         // Constructor
-        public Feet(double value) {
+        public QuantityLength(double value, LengthUnit unit) {
+
+            if (unit == null) {
+                throw new IllegalArgumentException("Unit cannot be null");
+            }
+
             this.value = value;
+            this.unit = unit;
         }
 
-        // Getter method
-        public double getValue() {
-            return value;
+        // Convert value to base unit (Feet)
+        public double toFeet() {
+            return value * unit.getConversionFactor();
         }
 
-        // Overriding equals() method
+        // equals() method
         @Override
         public boolean equals(Object obj) {
 
@@ -25,28 +51,86 @@ public class QuantityMeasurementApp {
                 return true;
             }
 
-            // Null check and type check
+            // Null and type check
             if (obj == null || getClass() != obj.getClass()) {
                 return false;
             }
 
-            // Safe casting
-            Feet feet = (Feet) obj;
+            QuantityLength other = (QuantityLength) obj;
 
-            // Compare double values safely
-            return Double.compare(this.value, feet.value) == 0;
+            // Tolerance for floating point precision
+            double EPSILON = 0.0001;
+
+            return Math.abs(this.toFeet() - other.toFeet()) < EPSILON;
+        }
+
+        @Override
+        public String toString() {
+            return "Quantity(" + value + ", " + unit + ")";
         }
     }
 
-    // Main method
+    // Main Method
     public static void main(String[] args) {
 
-        Feet feet1 = new Feet(1.0);
-        Feet feet2 = new Feet(1.0);
+        QuantityLength yard =
+                new QuantityLength(1.0, LengthUnit.YARDS);
 
-        boolean result = feet1.equals(feet2);
+        QuantityLength feet =
+                new QuantityLength(3.0, LengthUnit.FEET);
 
-        System.out.println("Input: 1.0 ft and 1.0 ft");
-        System.out.println("Output: Equal (" + result + ")");
+        System.out.println(
+                "Input: Quantity(1.0, YARDS) and Quantity(3.0, FEET)"
+        );
+
+        System.out.println(
+                "Output: Equal (" + yard.equals(feet) + ")"
+        );
+
+        System.out.println();
+
+        QuantityLength yardToInch =
+                new QuantityLength(1.0, LengthUnit.YARDS);
+
+        QuantityLength inches =
+                new QuantityLength(36.0, LengthUnit.INCHES);
+
+        System.out.println(
+                "Input: Quantity(1.0, YARDS) and Quantity(36.0, INCHES)"
+        );
+
+        System.out.println(
+                "Output: Equal (" + yardToInch.equals(inches) + ")"
+        );
+
+        System.out.println();
+
+        QuantityLength cm1 =
+                new QuantityLength(2.0, LengthUnit.CENTIMETERS);
+
+        QuantityLength cm2 =
+                new QuantityLength(2.0, LengthUnit.CENTIMETERS);
+
+        System.out.println(
+                "Input: Quantity(2.0, CENTIMETERS) and Quantity(2.0, CENTIMETERS)"
+        );
+
+        System.out.println(
+                "Output: Equal (" + cm1.equals(cm2) + ")"
+        );
+
+        System.out.println();
+
+        QuantityLength cm =
+                new QuantityLength(1.0, LengthUnit.CENTIMETERS);
+
+        QuantityLength inch =
+                new QuantityLength(0.393701, LengthUnit.INCHES);
+
+        System.out.println(
+                "Input: Quantity(1.0, CENTIMETERS) and Quantity(0.393701, INCHES)"
+        );
+
+        System.out.println("Output: Equal (" + cm.equals(inch) + ")");
     }
 }
