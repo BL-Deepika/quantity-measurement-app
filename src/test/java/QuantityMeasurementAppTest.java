@@ -4,6 +4,41 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class QuantityMeasurementAppTest {
 
+    @Test
+    public void testEquality_FeetToFeet_SameValue() {
+
+        QuantityMeasurementApp.QuantityLength q1 =
+                new QuantityMeasurementApp.QuantityLength(
+                        1.0,
+                        QuantityMeasurementApp.LengthUnit.FEET
+                );
+
+        QuantityMeasurementApp.QuantityLength q2 =
+                new QuantityMeasurementApp.QuantityLength(
+                        1.0,
+                        QuantityMeasurementApp.LengthUnit.FEET
+                );
+
+        assertTrue(q1.equals(q2));
+    }
+
+    @Test
+    public void testEquality_InchToInch_SameValue() {
+
+        QuantityMeasurementApp.QuantityLength q1 =
+                new QuantityMeasurementApp.QuantityLength(
+                        1.0,
+                        QuantityMeasurementApp.LengthUnit.INCH
+                );
+
+        QuantityMeasurementApp.QuantityLength q2 =
+                new QuantityMeasurementApp.QuantityLength(
+                        1.0,
+                        QuantityMeasurementApp.LengthUnit.INCH
+                );
+
+        assertTrue(q1.equals(q2));
+    }
 
     @Test
     public void testEquality_YardToYard_SameValue() {
