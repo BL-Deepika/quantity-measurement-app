@@ -1,4 +1,6 @@
 public class QuantityMeasurementApp {
+    // Enum for supported units
+    public enum LengthUnit {
 
     // Enum for Length Units
     public enum LengthUnit {
