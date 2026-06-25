@@ -84,7 +84,7 @@ public class QuantityMeasurementAppTest {
         Quantity<LengthUnit> result =
                 new Quantity<>(
                         1.0,
-                        LengthUnit.FEET
+                        WeightUnit.KILOGRAM
                 ).add(
                         new Quantity<>(
                                 12.0,
@@ -94,7 +94,7 @@ public class QuantityMeasurementAppTest {
                 );
 
         assertEquals(
-                2.0,
+                3.0,
                 result.getValue(),
                 EPSILON
         );
@@ -181,6 +181,34 @@ public class QuantityMeasurementAppTest {
         assertEquals(
                 feet.hashCode(),
                 inches.hashCode()
+        );
+    }
+
+    @Test
+    public void testEquality_NullUnit() {
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new QuantityWeight(
+                        1.0,
+                        null
+                )
+        );
+    }
+
+    @Test
+    public void testEquality_LargeWeightValue() {
+
+        assertTrue(
+                new QuantityWeight(
+                        1000000.0,
+                        WeightUnit.GRAM
+                ).equals(
+                        new QuantityWeight(
+                                1000.0,
+                                WeightUnit.KILOGRAM
+                        )
+                )
         );
     }
 }
