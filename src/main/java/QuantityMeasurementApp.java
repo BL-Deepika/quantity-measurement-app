@@ -1,52 +1,81 @@
 public class QuantityMeasurementApp {
 
-    // Inner class representing Feet measurement
-    public static class Feet {
-
-        // Immutable value field
-        private final double value;
-
-        // Constructor
-        public Feet(double value) {
-            this.value = value;
-        }
-
-        // Getter method
-        public double getValue() {
-            return value;
-        }
-
-        // Overriding equals() method
-        @Override
-        public boolean equals(Object obj) {
-
-            // Same reference check
-            if (this == obj) {
-                return true;
-            }
-
-            // Null check and type check
-            if (obj == null || getClass() != obj.getClass()) {
-                return false;
-            }
-
-            // Safe casting
-            Feet feet = (Feet) obj;
-
-            // Compare double values safely
-            return Double.compare(this.value, feet.value) == 0;
-        }
-    }
-
-    // Main method
     public static void main(String[] args) {
 
-        Feet feet1 = new Feet(1.0);
-        Feet feet2 = new Feet(1.0);
+        // Conversion
+        QuantityLength feet =
+                new QuantityLength(
+                        1.0,
+                        LengthUnit.FEET
+                );
 
-        boolean result = feet1.equals(feet2);
+        System.out.println(
+                "Input: Quantity(1.0, FEET).convertTo(INCHES)"
+        );
 
-        System.out.println("Input: 1.0 ft and 1.0 ft");
-        System.out.println("Output: Equal (" + result + ")");
+        System.out.println(
+                "Output: " +
+                        feet.convertTo(
+                                LengthUnit.INCHES
+                        )
+        );
+
+        System.out.println();
+
+        // Addition
+        QuantityLength result =
+                new QuantityLength(
+                        1.0,
+                        LengthUnit.FEET
+                ).add(
+                        new QuantityLength(
+                                12.0,
+                                LengthUnit.INCHES
+                        ),
+                        LengthUnit.FEET
+                );
+
+        System.out.println(
+                "Input: Quantity(1.0, FEET).add(Quantity(12.0, INCHES), FEET)"
+        );
+
+        System.out.println(
+                "Output: " + result
+        );
+
+        System.out.println();
+
+        // Equality
+        boolean equality =
+                new QuantityLength(
+                        36.0,
+                        LengthUnit.INCHES
+                ).equals(
+                        new QuantityLength(
+                                1.0,
+                                LengthUnit.YARDS
+                        )
+                );
+
+        System.out.println(
+                "Input: Quantity(36.0, INCHES).equals(Quantity(1.0, YARDS))"
+        );
+
+        System.out.println(
+                "Output: " + equality
+        );
+
+        System.out.println();
+
+        // Base Unit Conversion
+        System.out.println(
+                "Input: LengthUnit.INCHES.convertToBaseUnit(12.0)"
+        );
+
+        System.out.println(
+                "Output: " +
+                        LengthUnit.INCHES
+                                .convertToBaseUnit(12.0)
+        );
     }
 }
