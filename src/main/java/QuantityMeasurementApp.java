@@ -1,83 +1,110 @@
 public class QuantityMeasurementApp {
-    // Enum for supported units
-    public enum LengthUnit {
+    // Generic Equality Demonstration
+    public static <U extends Measurable>
+    void demonstrateEquality(
+            Quantity<U> first,
+            Quantity<U> second
+    ) {
 
+        System.out.println(
+                first + ".equals(" +
+                        second + ") => " +
+                        first.equals(second)
+        );
+
+        System.out.println();
+    }
+
+    // Generic Conversion Demonstration
+    public static <U extends Measurable>
+    void demonstrateConversion(
+            Quantity<U> quantity,
+            U targetUnit
+    ) {
+
+        System.out.println(
+                quantity + ".convertTo(" +
+                        targetUnit + ") => " +
+                        quantity.convertTo(targetUnit)
+        );
+
+        System.out.println();
+    }
+
+    // Generic Addition Demonstration
+    public static <U extends Measurable>
+    void demonstrateAddition(
+            Quantity<U> first,
+            Quantity<U> second,
+            U targetUnit
+    ) {
+
+        System.out.println(
+                first + ".add(" +
+                        second + ", " +
+                        targetUnit + ") => " +
+                        first.add(second, targetUnit)
+        );
+
+        System.out.println();
+    }
+
+    // Main Method
     public static void main(String[] args) {
 
-        // Conversion
-        QuantityLength feet =
-                new QuantityLength(
+        // Length
+        Quantity<LengthUnit> feet =
+                new Quantity<>(
                         1.0,
                         LengthUnit.FEET
                 );
 
-        System.out.println(
-                "Input: Quantity(1.0, FEET).convertTo(INCHES)"
+        Quantity<LengthUnit> inches =
+                new Quantity<>(
+                        12.0,
+                        LengthUnit.INCHES
+                );
+
+        demonstrateEquality(feet, inches);
+
+        demonstrateConversion(
+                feet,
+                LengthUnit.INCHES
         );
 
-        System.out.println(
-                "Output: " +
-                        feet.convertTo(
-                                LengthUnit.INCHES
-                        )
+        demonstrateAddition(
+                feet,
+                inches,
+                LengthUnit.FEET
         );
 
-        System.out.println();
-
-        // Addition
-        QuantityLength result =
-                new QuantityLength(
+        // Weight
+        Quantity<WeightUnit> kilogram =
+                new Quantity<>(
                         1.0,
-                        LengthUnit.FEET
-                ).add(
-                        new QuantityLength(
-                                12.0,
-                                LengthUnit.INCHES
-                        ),
-                        LengthUnit.FEET
+                        WeightUnit.KILOGRAM
                 );
 
-        System.out.println(
-                "Input: Quantity(1.0, FEET).add(Quantity(12.0, INCHES), FEET)"
-        );
-
-        System.out.println(
-                "Output: " + result
-        );
-
-        System.out.println();
-
-        // Equality
-        boolean equality =
-                new QuantityLength(
-                        36.0,
-                        LengthUnit.INCHES
-                ).equals(
-                        new QuantityLength(
-                                1.0,
-                                LengthUnit.YARDS
-                        )
+        Quantity<WeightUnit> gram =
+                new Quantity<>(
+                        1000.0,
+                        WeightUnit.GRAM
                 );
 
-        System.out.println(
-                "Input: Quantity(36.0, INCHES).equals(Quantity(1.0, YARDS))"
+        demonstrateEquality(
+                kilogram,
+                gram
         );
 
-        System.out.println(
-                "Output: " + equality
+        demonstrateConversion(
+                kilogram,
+                WeightUnit.GRAM
         );
 
-        System.out.println();
-
-        // Base Unit Conversion
-        System.out.println(
-                "Input: LengthUnit.INCHES.convertToBaseUnit(12.0)"
-        );
-
-        System.out.println(
-                "Output: " +
-                        LengthUnit.INCHES
-                                .convertToBaseUnit(12.0)
+        demonstrateAddition(
+                kilogram,
+                gram,
+                WeightUnit.KILOGRAM
         );
     }
 }

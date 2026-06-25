@@ -7,58 +7,16 @@ public class QuantityMeasurementAppTest {
     private static final double EPSILON = 0.0001;
 
     @Test
-    public void testLengthUnitEnum_FeetConstant() {
+    public void testGenericQuantity_LengthEquality() {
 
-        assertEquals(
-                1.0,
-                LengthUnit.FEET.getConversionFactor(),
-                EPSILON
-        );
-    }
-
-    @Test
-    public void testLengthUnitEnum_InchesConstant() {
-
-        assertEquals(
-                1.0 / 12.0,
-                LengthUnit.INCHES.getConversionFactor(),
-                EPSILON
-        );
-    }
-
-    @Test
-    public void testConvertToBaseUnit_InchesToFeet() {
-
-        assertEquals(
-                1.0,
-                LengthUnit.INCHES
-                        .convertToBaseUnit(12.0),
-                EPSILON
-        );
-    }
-
-    @Test
-    public void testConvertFromBaseUnit_FeetToInches() {
-
-        assertEquals(
-                12.0,
-                LengthUnit.INCHES
-                        .convertFromBaseUnit(1.0),
-                EPSILON
-        );
-    }
-
-    @Test
-    public void testQuantityLengthRefactored_Equality() {
-
-        QuantityLength feet =
-                new QuantityLength(
+        Quantity<LengthUnit> feet =
+                new Quantity<>(
                         1.0,
                         LengthUnit.FEET
                 );
 
-        QuantityLength inches =
-                new QuantityLength(
+        Quantity<LengthUnit> inches =
+                new Quantity<>(
                         12.0,
                         LengthUnit.INCHES
                 );
@@ -67,16 +25,31 @@ public class QuantityMeasurementAppTest {
     }
 
     @Test
-    public void testQuantityLengthRefactored_ConvertTo() {
+    public void testGenericQuantity_WeightEquality() {
 
-        QuantityLength feet =
-                new QuantityLength(
+        Quantity<WeightUnit> kilogram =
+                new Quantity<>(
                         1.0,
-                        LengthUnit.FEET
+                        WeightUnit.KILOGRAM
                 );
 
-        QuantityLength result =
-                feet.convertTo(
+        Quantity<WeightUnit> gram =
+                new Quantity<>(
+                        1000.0,
+                        WeightUnit.GRAM
+                );
+
+        assertTrue(kilogram.equals(gram));
+    }
+
+    @Test
+    public void testGenericQuantity_LengthConversion() {
+
+        Quantity<LengthUnit> result =
+                new Quantity<>(
+                        1.0,
+                        LengthUnit.FEET
+                ).convertTo(
                         LengthUnit.INCHES
                 );
 
@@ -88,14 +61,32 @@ public class QuantityMeasurementAppTest {
     }
 
     @Test
-    public void testQuantityLengthRefactored_Add() {
+    public void testGenericQuantity_WeightConversion() {
 
-        QuantityLength result =
-                new QuantityLength(
+        Quantity<WeightUnit> result =
+                new Quantity<>(
+                        1.0,
+                        WeightUnit.KILOGRAM
+                ).convertTo(
+                        WeightUnit.GRAM
+                );
+
+        assertEquals(
+                1000.0,
+                result.getValue(),
+                EPSILON
+        );
+    }
+
+    @Test
+    public void testGenericQuantity_LengthAddition() {
+
+        Quantity<LengthUnit> result =
+                new Quantity<>(
                         1.0,
                         LengthUnit.FEET
                 ).add(
-                        new QuantityLength(
+                        new Quantity<>(
                                 12.0,
                                 LengthUnit.INCHES
                         ),
@@ -110,45 +101,62 @@ public class QuantityMeasurementAppTest {
     }
 
     @Test
-    public void testQuantityLengthRefactored_AddWithTargetUnit() {
+    public void testGenericQuantity_WeightAddition() {
 
-        QuantityLength result =
-                new QuantityLength(
+        Quantity<WeightUnit> result =
+                new Quantity<>(
                         1.0,
-                        LengthUnit.FEET
+                        WeightUnit.KILOGRAM
                 ).add(
-                        new QuantityLength(
-                                12.0,
-                                LengthUnit.INCHES
+                        new Quantity<>(
+                                1000.0,
+                                WeightUnit.GRAM
                         ),
-                        LengthUnit.YARDS
+                        WeightUnit.KILOGRAM
                 );
 
         assertEquals(
-                0.6667,
+                2.0,
                 result.getValue(),
                 EPSILON
         );
     }
 
     @Test
-    public void testQuantityLengthRefactored_NullUnit() {
+    public void testCrossCategoryPrevention() {
 
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new QuantityLength(
+        Quantity<LengthUnit> feet =
+                new Quantity<>(
                         1.0,
-                        null
-                )
-        );
+                        LengthUnit.FEET
+                );
+
+        Quantity<WeightUnit> kilogram =
+                new Quantity<>(
+                        1.0,
+                        WeightUnit.KILOGRAM
+                );
+
+        assertFalse(feet.equals(kilogram));
     }
 
     @Test
-    public void testQuantityLengthRefactored_InvalidValue() {
+    public void testConstructorValidation_NullUnit() {
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new QuantityLength(
+                ()->new Quantity<>(
+                        1.0,
+                        null
+                ));
+    }
+
+    @Test
+    public void testConstructorValidation_InvalidValue() {
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Quantity<>(
                         Double.NaN,
                         LengthUnit.FEET
                 )
@@ -156,28 +164,23 @@ public class QuantityMeasurementAppTest {
     }
 
     @Test
-    public void testRoundTripConversion_RefactoredDesign() {
+    public void testHashCodeConsistency() {
 
-        QuantityLength original =
-                new QuantityLength(
-                        5.0,
+        Quantity<LengthUnit> feet =
+                new Quantity<>(
+                        1.0,
                         LengthUnit.FEET
                 );
 
-        QuantityLength converted =
-                original.convertTo(
+        Quantity<LengthUnit> inches =
+                new Quantity<>(
+                        12.0,
                         LengthUnit.INCHES
                 );
 
-        QuantityLength result =
-                converted.convertTo(
-                        LengthUnit.FEET
-                );
-
         assertEquals(
-                original.getValue(),
-                result.getValue(),
-                EPSILON
+                feet.hashCode(),
+                inches.hashCode()
         );
     }
 }
