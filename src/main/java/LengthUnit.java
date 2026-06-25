@@ -1,4 +1,4 @@
-public enum LengthUnit {
+public enum LengthUnit implements Measurable {
     FEET(1.0),
     INCHES(1.0 / 12.0),
     YARDS(3.0),
@@ -29,6 +29,11 @@ public enum LengthUnit {
         validateValue(baseValue);
 
         return baseValue / conversionFactor;
+    }
+
+    @Override
+    public String getUnitName() {
+        return name();
     }
 
     // Validation
