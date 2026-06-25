@@ -1,7 +1,4 @@
 public class QuantityMeasurementApp {
-    // Enum for supported units
-    public enum LengthUnit {
-
     public static void main(String[] args) {
 
         // Conversion
