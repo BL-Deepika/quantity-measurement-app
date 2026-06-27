@@ -1,4 +1,5 @@
 public class QuantityLength {
+
     private static final double EPSILON = 0.0001;
 
     private final double value;

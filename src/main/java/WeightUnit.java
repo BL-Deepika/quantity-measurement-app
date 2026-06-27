@@ -1,4 +1,5 @@
 public enum WeightUnit implements Measurable {
+
     KILOGRAM(1.0),
     GRAM(0.001),
     POUND(0.453592);
@@ -8,6 +9,7 @@ public enum WeightUnit implements Measurable {
     WeightUnit(double conversionFactor) {
         this.conversionFactor = conversionFactor;
     }
+
 
     @Override
     public double getConversionFactor() {

@@ -1,4 +1,5 @@
 public class QuantityWeight {
+
     private static final double EPSILON = 0.0001;
 
     private final double value;
@@ -8,6 +9,7 @@ public class QuantityWeight {
             double value,
             WeightUnit unit
     ) {
+
 
         validateValue(value);
 
