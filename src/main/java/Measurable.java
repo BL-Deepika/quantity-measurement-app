@@ -1,4 +1,5 @@
-public interface Measurable {
+public interface Measurable
+{
     double getConversionFactor();
 
     double convertToBaseUnit(double value);
